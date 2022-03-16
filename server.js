@@ -19,22 +19,24 @@ const cors = require('cors');
 app.use(express.static('website'));
 
 // Global variables
-let projectData = [{}]
+let projectData = {}
 
 
-// Setup Server
+// Create GET request handler
 app.get('/get', (req, res) => {
     res.send(projectData);
-    console.log("GET request");
 });
 
+// Create post request
 app.post('/post', (req,res) => {
     let newData = req.body;
-    projectData.push(newData); 
-    console.log(projectData);
+    projectData = newData; 
     res.send(projectData);
+
+    console.log("POST: ", projectData);
 });
 
+// Kickoff App
 app.listen(port, () => {
     console.log(`Node app running on port ${port}`);
 })

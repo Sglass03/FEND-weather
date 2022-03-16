@@ -10,11 +10,11 @@ const url = 'https://api.openweathermap.org/data/2.5/weather?zip=';
 const urlPost = 'http://localhost:8000/post'
 
 // Create a new date instance dynamically with JS
-let d = new Date();
-let newDate = d.getMonth()+'.'+ d.getDate()+'.'+ d.getFullYear();
+const d = new Date();
+const newDate = d.getMonth()+'.'+ d.getDate()+'.'+ d.getFullYear();
 
 // Async Get request to Open Weather API
-let openWeatherAPI = async (url, apiKey, zip) => {
+const openWeatherAPI = async (url, apiKey, zip) => {
     // test = document.getElementById('zip').value;
     // console.log(test);
     let res = await fetch(url+zip+apiKey)
@@ -28,7 +28,7 @@ let openWeatherAPI = async (url, apiKey, zip) => {
 }
 
 // POST request to local server
-let postRequest = async (url = '', data = {}) => {
+const postRequest = async (url = '', data = {}) => {
     let res = await fetch(url, {
         method: 'POST',
         credentials: 'same-origin',
@@ -49,7 +49,7 @@ let postRequest = async (url = '', data = {}) => {
 // Update UI async function 
 const updateUI = async (dataObject) => {
     document.getElementById('date').innerHTML = `Date: ${dataObject.date}`;
-    document.getElementById('temp').innerHTML = `Temp: ${dataObject.temperature}`;
+    document.getElementById('temp').innerHTML = `Temp: ${Math.round(dataObject.temperature)} degrees`;
     document.getElementById('content').innerHTML = `Feelings: ${dataObject.userResponse}`;
 }
 
