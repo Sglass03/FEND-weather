@@ -7,11 +7,11 @@ const url = 'https://api.openweathermap.org/data/2.5/weather?zip=';
 // https://api.openweathermap.org/data/2.5/weather?zip=02478&appid=50498bcddb846b376b5641d1e658057d&units=imperial
 
 // Create local URL info
-const urlPost = 'http://localhost:8000/post'
+const urlBase = 'http://localhost:8000/'
 
 // Create a new date instance dynamically with JS
-const d = new Date();
-const newDate = d.getMonth()+'.'+ d.getDate()+'.'+ d.getFullYear();
+const d = new Date(Date.now());
+const newDate = d.getMonth() + 1 +'.'+ d.getDate()+'.'+ d.getFullYear();
 
 // Async Get request to Open Weather API
 const openWeatherAPI = async (url, apiKey, zip) => {
@@ -46,11 +46,22 @@ const postRequest = async (url = '', data = {}) => {
     }
 }
 
-// Update UI async function 
-const updateUI = async (dataObject) => {
-    document.getElementById('date').innerHTML = `Date: ${dataObject.date}`;
-    document.getElementById('temp').innerHTML = `Temp: ${Math.round(dataObject.temperature)} degrees`;
-    document.getElementById('content').innerHTML = `Feelings: ${dataObject.userResponse}`;
+
+// Get request to server and update UI
+const getRequest = async(url='') => {
+    let res = await fetch(url);
+
+    try {
+        let dataObject = await res.json();
+        
+        document.getElementById('date').innerHTML = `Date: ${dataObject.date}`;
+        document.getElementById('temp').innerHTML = `Temp: ${Math.round(dataObject.temperature)} degrees`;
+        document.getElementById('content').innerHTML = `Feelings: ${dataObject.userResponse}`;
+
+
+    } catch (error) {
+        console.log("Error: ", error);
+    }
 }
 
 // Run chained promises to: GET temperature data, POST that to server, then update UI
@@ -66,9 +77,9 @@ function mainFunction() {
                 userResponse: userResponse
             }
 
-            return postRequest(urlPost, dataObject);
+            return postRequest(urlBase + 'post', dataObject);
         }).then((response) => {
-            updateUI(response);
+            getRequest(urlBase + 'get');
         }).catch((error) => {
             console.log("Error", error);
         });
